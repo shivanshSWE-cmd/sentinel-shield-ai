@@ -21,7 +21,10 @@
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js', { scope: './' })
-          .then((reg) => console.log('[SentinelShield] SW Registered! Scope:', reg.scope))
+          .then((reg) => {
+            reg.update();
+            console.log('[SentinelShield] SW Registered & Updated! Scope:', reg.scope);
+          })
           .catch((err) => console.log('[SentinelShield] SW Registration note:', err));
       });
     }
@@ -301,7 +304,7 @@
   </nav>
 
   <!-- Scripts with Cache Busting -->
-  <script src="./js/app.js?v=2.7"></script>
-  <script src="./js/forensic-pdf.js?v=2.7"></script>
+  <script src="./js/app.js?v=4.0"></script>
+  <script src="./js/forensic-pdf.js?v=4.0"></script>
 </body>
 </html>
