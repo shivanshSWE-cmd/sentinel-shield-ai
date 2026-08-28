@@ -115,21 +115,21 @@
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
         <!-- Quick Presets -->
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-          <button class="btn-secondary sample-threat-btn" style="font-size: 0.72rem; padding: 0.35rem 0.65rem;" data-sample-text="i will kill you">
+          <button class="btn-secondary sample-threat-btn" style="font-size: 0.72rem; padding: 0.35rem 0.65rem;" data-sample-text="i will kill you" onclick="window.SmsShield.fillAndScan(this.dataset.sampleText)">
             💀 Direct Death Threat
           </button>
-          <button class="btn-secondary sample-threat-btn" style="font-size: 0.72rem; padding: 0.35rem 0.65rem;" data-sample-text="CBI arrest warrant issued against you for illegal narcotics package seized by customs. Transfer settlement fine to RBI safe account within 2 hours or police will arrive.">
+          <button class="btn-secondary sample-threat-btn" style="font-size: 0.72rem; padding: 0.35rem 0.65rem;" data-sample-text="CBI arrest warrant issued against you for illegal narcotics package seized by customs. Transfer settlement fine to RBI safe account within 2 hours or police will arrive." onclick="window.SmsShield.fillAndScan(this.dataset.sampleText)">
             🚨 Digital Arrest Sample
           </button>
-          <button class="btn-secondary sample-threat-btn" style="font-size: 0.72rem; padding: 0.35rem 0.65rem;" data-sample-text="We recorded your private video via webcam. Pay 50000 Rs immediately or we will leak your video to all your family and contacts.">
+          <button class="btn-secondary sample-threat-btn" style="font-size: 0.72rem; padding: 0.35rem 0.65rem;" data-sample-text="We recorded your private video via webcam. Pay 50000 Rs immediately or we will leak your video to all your family and contacts." onclick="window.SmsShield.fillAndScan(this.dataset.sampleText)">
             📸 Blackmail / Sextortion
           </button>
-          <button class="btn-secondary sample-threat-btn" style="font-size: 0.72rem; padding: 0.35rem 0.65rem;" data-sample-text="Dear Customer, your electricity bill is unpaid. Power will be disconnected tonight. Update immediately.">
+          <button class="btn-secondary sample-threat-btn" style="font-size: 0.72rem; padding: 0.35rem 0.65rem;" data-sample-text="Dear Customer, your electricity bill is unpaid. Power will be disconnected tonight. Update immediately." onclick="window.SmsShield.fillAndScan(this.dataset.sampleText)">
             ⚠️ Utility Cutoff Scam
           </button>
         </div>
 
-        <button id="btnScanMessage" class="btn-primary">
+        <button id="btnScanMessage" class="btn-primary" onclick="window.SmsShield.scanCurrentInput()">
           ⚡ SCAN EXTORTION & ARREST PATTERNS
         </button>
       </div>
@@ -194,8 +194,8 @@
   </nav>
 
   <!-- Scripts with Cache Busting -->
-  <script src="./js/app.js?v=2.7"></script>
-  <script src="./js/sms-shield.js?v=2.7"></script>
-  <script src="./js/forensic-pdf.js?v=2.7"></script>
+  <script src="./js/app.js?v=2.8"></script>
+  <script src="./js/sms-shield.js?v=2.8"></script>
+  <script src="./js/forensic-pdf.js?v=2.8"></script>
 </body>
 </html>

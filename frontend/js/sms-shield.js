@@ -1,6 +1,6 @@
 /**
  * SentinelShield AI — Digital Arrest & SMS Extortion Shield Module (Vanilla JS)
- * Enhanced with Smart Backend Endpoint Resolution + Client-Side Fallback
+ * Enhanced with Smart Backend Endpoint Resolution + High-Speed Client-Side Fallback
  */
 
 window.SmsShield = {
@@ -10,37 +10,82 @@ window.SmsShield = {
     const channelSelect = document.getElementById('messageChannelSelect');
 
     if (scanBtn && inputEl) {
-      scanBtn.addEventListener('click', () => {
-        const text = inputEl.value;
-        const channel = channelSelect ? channelSelect.value : 'sms';
-        this.scanMessage(text, channel);
+      // Remove any existing listeners by replacing or assigning onclick
+      scanBtn.onclick = (e) => {
+        if (e) e.preventDefault();
+        window.SmsShield.scanCurrentInput();
+      };
+
+      inputEl.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          window.SmsShield.scanCurrentInput();
+        }
       });
     }
 
     // Quick fill sample triggers for demo
     const sampleBtns = document.querySelectorAll('.sample-threat-btn');
     sampleBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (inputEl) {
-          inputEl.value = btn.dataset.sampleText;
-          const channel = channelSelect ? channelSelect.value : 'sms';
-          this.scanMessage(inputEl.value, channel);
+      btn.onclick = (e) => {
+        if (e) e.preventDefault();
+        const text = btn.dataset.sampleText;
+        if (text) {
+          window.SmsShield.fillAndScan(text);
         }
-      });
+      };
     });
+
+    console.log("[SmsShield] Module initialized successfully.");
   },
 
-  async scanMessage(text, channel) {
+  scanCurrentInput() {
+    const inputEl = document.getElementById('messageScanInput');
+    const channelSelect = document.getElementById('messageChannelSelect');
+    const text = inputEl ? inputEl.value : '';
+    const channel = channelSelect ? channelSelect.value : 'sms';
+    this.scanMessage(text, channel);
+  },
+
+  fillAndScan(sampleText) {
+    const inputEl = document.getElementById('messageScanInput');
+    const channelSelect = document.getElementById('messageChannelSelect');
+    if (inputEl) {
+      inputEl.value = sampleText;
+    }
+    const channel = channelSelect ? channelSelect.value : 'sms';
+    this.scanMessage(sampleText, channel);
+  },
+
+  async scanMessage(text, channel = 'sms') {
     if (!text || !text.trim()) {
       alert("Please enter or paste message text to scan.");
       return;
     }
 
-    const container = document.getElementById('messageResultsContainer');
     const scanBtn = document.getElementById('btnScanMessage');
     if (scanBtn) scanBtn.textContent = 'SCANNING PATTERNS...';
 
-    const apiUrl = window.SentinelApp.getApiUrl('/api/v1/scan-message');
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const hasCustomBackend = window.SentinelApp && window.SentinelApp.backendBaseUrl;
+
+    // If running on static hosting without custom backend, run client-side engine directly for instant results
+    if (!isLocalhost && !hasCustomBackend) {
+      try {
+        const clientData = this.analyzeMessageInClient(text.trim(), channel);
+        if (window.SentinelApp && window.SentinelApp.sharedForensicData) {
+          window.SentinelApp.sharedForensicData.sms_data = clientData;
+        }
+        this.renderResults(clientData);
+      } catch (e) {
+        console.error("[SmsShield] Error in client analysis:", e);
+      } finally {
+        if (scanBtn) scanBtn.textContent = '⚡ SCAN EXTORTION & ARREST PATTERNS';
+      }
+      return;
+    }
+
+    // Otherwise query backend API
+    const apiUrl = window.SentinelApp ? window.SentinelApp.getApiUrl('/api/v1/scan-message') : '/api/v1/scan-message';
 
     try {
       const res = await fetch(apiUrl, {
@@ -51,15 +96,19 @@ window.SmsShield = {
 
       if (res.ok) {
         const data = await res.json();
-        window.SentinelApp.sharedForensicData.sms_data = data;
+        if (window.SentinelApp && window.SentinelApp.sharedForensicData) {
+          window.SentinelApp.sharedForensicData.sms_data = data;
+        }
         this.renderResults(data);
         return;
       }
       throw new Error(`Server returned ${res.status}`);
     } catch (err) {
-      console.warn("Backend API unavailable — using client-side Aho-Corasick pattern engine:", err);
+      console.warn("[SmsShield] Backend API unreachable — running client-side NLP engine:", err);
       const clientData = this.analyzeMessageInClient(text.trim(), channel);
-      window.SentinelApp.sharedForensicData.sms_data = clientData;
+      if (window.SentinelApp && window.SentinelApp.sharedForensicData) {
+        window.SentinelApp.sharedForensicData.sms_data = clientData;
+      }
       this.renderResults(clientData);
     } finally {
       if (scanBtn) scanBtn.textContent = '⚡ SCAN EXTORTION & ARREST PATTERNS';
@@ -67,12 +116,9 @@ window.SmsShield = {
   },
 
   // --------------------------------------------------------------------------
-  // Client-Side Pattern Matching Engine
-  // --------------------------------------------------------------------------
-  // --------------------------------------------------------------------------
   // Client-Side Advanced Semantic & Pattern Matching Engine
   // --------------------------------------------------------------------------
-  analyzeMessageInClient(text, channel) {
+  analyzeMessageInClient(text, channel = 'sms') {
     const textLower = text.toLowerCase().trim();
 
     const patterns = [
