@@ -163,6 +163,30 @@
     </div>
   </div>
 
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="./index.html" class="mobile-nav-item">
+      <span class="mnav-icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="./voice-shield.html" class="mobile-nav-item">
+      <span class="mnav-icon">🎤</span>
+      <span>Voice</span>
+    </a>
+    <a href="./link-shield.html" class="mobile-nav-item">
+      <span class="mnav-icon">🔗</span>
+      <span>Links</span>
+    </a>
+    <a href="./sms-shield.html" class="mobile-nav-item active">
+      <span class="mnav-icon">📱</span>
+      <span>SMS</span>
+    </a>
+    <button class="mobile-nav-item" onclick="document.getElementById('pdfModalBackdrop').classList.add('open')">
+      <span class="mnav-icon">📄</span>
+      <span>PDF</span>
+    </button>
+  </nav>
+
   <!-- Scripts with Cache Busting -->
   <script src="./js/app.js?v=2.5"></script>
   <script src="./js/sms-shield.js?v=2.5"></script>

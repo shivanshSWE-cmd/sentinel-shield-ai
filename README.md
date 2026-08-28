@@ -14,6 +14,11 @@
 
 > **Shield Yourself from Online Impersonation** — An enterprise-grade, sub-second (&lt;300ms) multi-modal cybersecurity defense platform engineered to detect synthetic voice cloning, high-entropy phishing URLs, and digital arrest extortion schemes with Section 65B legal admissibility.
 
+### 🌐 [Live App →](https://shivanshswe-cmd.github.io/sentinel-shield-ai/) &nbsp;|&nbsp; 📦 [GitHub Repo →](https://github.com/shivanshSWE-cmd/sentinel-shield-ai)
+
+[![Live App](https://img.shields.io/badge/Live%20App-GitHub%20Pages-22c55e?style=for-the-badge&logo=github&logoColor=white)](https://shivanshswe-cmd.github.io/sentinel-shield-ai/)
+[![Demo](https://img.shields.io/badge/Try%20It%20Now-Open%20App-6366f1?style=for-the-badge&logo=googlechrome&logoColor=white)](https://shivanshswe-cmd.github.io/sentinel-shield-ai/)
+
 </div>
 
 ---
