@@ -494,4 +494,9 @@ window.SmsShield = {
   }
 };
 
-};
+// Direct auto-initialization fallback
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => window.SmsShield.init());
+} else {
+  window.SmsShield.init();
+}
