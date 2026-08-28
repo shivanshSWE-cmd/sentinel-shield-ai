@@ -36,34 +36,74 @@ class PatternDef:
     weight: float
 
 
+import re
+
+# ---------------------------------------------------------------------------
+# Threat Pattern Definitions (Extensive Multi-Category Suite)
+# ---------------------------------------------------------------------------
+@dataclass
+class PatternDef:
+    pattern_id: str
+    pattern_name: str
+    keywords: List[str]
+    category: str
+    weight: float
+
+
 PATTERN_DEFINITIONS: List[PatternDef] = [
+    # --- Direct Violence & Death Threats (Critical Priority) ---
+    PatternDef(
+        pattern_id="PT001", pattern_name="Direct Death & Physical Violence Threat",
+        keywords=[
+            "i will kill you", "i will kill u", "will kill you", "will kill u", "kill you", "kill u",
+            "going to kill you", "murder you", "end your life", "shoot you", "stab you", "harm you",
+            "physical harm", "die bitch", "death threat", "beat you up", "break your legs",
+            "cut you", "send goons", "send gangsters", "gangster threat", "goonda sent",
+            "we know where you live", "your family will suffer", "we will find you", "hunt you down",
+            "last day of your life", "pay or die", "kill your family", "eliminate you", "destroy you",
+        ],
+        category="personal_threat", weight=0.99,
+    ),
+    # --- Blackmail & Sextortion ---
+    PatternDef(
+        pattern_id="BM001", pattern_name="Blackmail & Sextortion Threat",
+        keywords=[
+            "leak your video", "leak your photos", "leak your pics", "send video to your contacts",
+            "send to all your contacts", "send to your friends", "post on social media", "post on facebook",
+            "post on instagram", "intimate video", "intimate photos", "webcam recorded", "nude photos",
+            "viral video", "ruin your reputation", "defame you", "pay ransom", "pay or i leak",
+            "pay or we expose", "expose your secrets", "blackmail",
+        ],
+        category="personal_threat", weight=0.96,
+    ),
     # --- Digital Arrest Indicators ---
     PatternDef(
         pattern_id="DA001", pattern_name="CBI & Law Enforcement Arrest Warrant",
         keywords=[
             "cbi arrest", "cbi warrant", "cbi officer", "cbi", "central bureau of investigation",
             "you have been arrested", "digital arrest", "cyber arrest", "under arrest",
-            "arrest warrant", "arrested", "non-bailable arrest warrant",
+            "arrest warrant", "arrested", "non-bailable arrest warrant", "cyber crime department",
+            "crime branch", "arrest warrant issued", "chargesheet filed",
         ],
         category="digital_arrest", weight=0.95,
     ),
     PatternDef(
         pattern_id="DA002", pattern_name="Customs & Narcotics Seizure",
         keywords=[
-            "customs seizure", "narcotics control", "package seized",
-            "illegal parcel", "drug shipment", "customs department",
-            "ncb arrest", "narcotics bureau",
+            "customs seizure", "narcotics control", "package seized", "illegal parcel",
+            "drug shipment", "customs department", "ncb arrest", "narcotics bureau",
+            "customs parcel", "drugs found in parcel", "contraband seized",
         ],
-        category="digital_arrest", weight=0.90,
+        category="digital_arrest", weight=0.92,
     ),
     PatternDef(
-        pattern_id="DA003", pattern_name="Police Enforcement Threat",
+        pattern_id="DA003", pattern_name="Police Enforcement & Legal Court Notice",
         keywords=[
-            "police will arrive", "cops are coming", "fir registered",
-            "non-bailable warrant", "nbw issued", "arrest warrant issued",
-            "chargesheet filed", "cybercrime fir",
+            "police will arrive", "cops are coming", "fir registered", "non-bailable warrant",
+            "nbw issued", "cybercrime fir", "police custody", "supreme court notice",
+            "high court warrant", "court summons issued", "police inquiry",
         ],
-        category="digital_arrest", weight=0.88,
+        category="digital_arrest", weight=0.90,
     ),
     # --- Financial Extortion ---
     PatternDef(
@@ -72,6 +112,7 @@ PATTERN_DEFINITIONS: List[PatternDef] = [
             "transfer money immediately", "send money now", "transfer to safe account",
             "safe account", "rbi safe account", "supreme court deposit", "pay fine immediately",
             "penalty payment", "settlement amount", "transfer rs", "pay immediately",
+            "deposit money now", "pay fine or arrest", "transfer amount to avoid",
         ],
         category="financial_extortion", weight=0.92,
     ),
@@ -80,55 +121,221 @@ PATTERN_DEFINITIONS: List[PatternDef] = [
         keywords=[
             "buy gift card", "send bitcoin", "send usdt", "crypto payment",
             "google play card", "itunes card", "amazon gift card payment",
+            "transfer crypto", "pay in bitcoin",
         ],
-        category="financial_extortion", weight=0.85,
+        category="financial_extortion", weight=0.86,
     ),
     # --- Urgency Pressure ---
     PatternDef(
-        pattern_id="UP001", pattern_name="2-Hour / Immediate Deadline",
+        pattern_id="UP001", pattern_name="Immediate Deadline / Panic Coercion",
         keywords=[
-            "2 hour deadline", "two hour deadline", "within 2 hours",
+            "2 hour deadline", "two hour deadline", "within 2 hours", "within 1 hour",
             "30 minutes remaining", "last chance", "immediate action required",
-            "do not delay", "act now or", "time is running out",
+            "do not delay", "act now or", "time is running out", "final warning",
+            "last warning", "respond immediately",
         ],
-        category="urgency_pressure", weight=0.75,
+        category="urgency_pressure", weight=0.78,
     ),
     PatternDef(
-        pattern_id="UP002", pattern_name="Secrecy Instruction",
+        pattern_id="UP002", pattern_name="Secrecy & Isolation Demand",
         keywords=[
             "do not tell anyone", "keep this confidential", "don't inform family",
             "don't call police", "stay on the call", "disconnect at your own risk",
+            "do not disconnect video call", "remain in isolated room", "stay on camera",
         ],
-        category="urgency_pressure", weight=0.80,
+        category="urgency_pressure", weight=0.82,
     ),
     # --- Authority Impersonation ---
     PatternDef(
-        pattern_id="AI001", pattern_name="Government Agency Impersonation",
+        pattern_id="AI001", pattern_name="Government & Regulatory Impersonation",
         keywords=[
             "rrb officer", "income tax raid", "ed officer", "enforcement directorate",
-            "ici officer", "trai", "telecom authority", "supreme court bench",
-            "high court notice", "ministry of finance",
+            "trai", "telecom authority", "supreme court bench", "high court notice",
+            "ministry of finance", "rbi verification",
         ],
         category="authority_impersonation", weight=0.87,
     ),
     PatternDef(
-        pattern_id="AI002", pattern_name="SIM / Account Block Threat",
+        pattern_id="AI002", pattern_name="SIM / Banking / Utility Deactivation Scam",
         keywords=[
             "sim will be blocked", "sim card blocked", "account will be frozen",
             "bank account suspended", "kyc suspended", "aadhaar flagged",
+            "electricity will be disconnected", "electricity bill unpaid", "power cutoff tonight",
+            "pan deactivated", "credit card blocked",
         ],
-        category="authority_impersonation", weight=0.82,
-    ),
-    # --- Personal Threat ---
-    PatternDef(
-        pattern_id="PT001", pattern_name="Physical Harm Threat",
-        keywords=[
-            "your family will suffer", "we know where you live",
-            "harm will come", "gangster threat", "goonda sent",
-        ],
-        category="personal_threat", weight=0.97,
+        category="authority_impersonation", weight=0.84,
     ),
 ]
+
+
+# ---------------------------------------------------------------------------
+# Semantic NLP & Sentence Meaning Extraction
+# ---------------------------------------------------------------------------
+def analyze_sentence_semantics(
+    text: str,
+    matched_patterns: List[ThreatPattern],
+    threat_score: float,
+) -> Tuple[Dict[str, Any], str, str]:
+    """
+    Analyzes the semantic grammar, intent, and deeper meaning of the message.
+    Returns (semantic_data_dict, verdict, recommended_action).
+    """
+    text_lower = text.lower().strip()
+
+    # Regex patterns for grammatical intent recognition
+    has_death_threat = bool(
+        re.search(r"\b(i\s+(will|shall|am\s+going\s+to|gonna)\s+(kill|murder|shoot|stab|harm|destroy|end|hurt|eliminate)\s+(you|u|your))\b", text_lower)
+        or re.search(r"\b(kill\s+(you|u)|murder\s+you|death\s+threat|end\s+your\s+life|pay\s+or\s+die|shoot\s+you|stab\s+you|eliminate\s+you)\b", text_lower)
+    )
+
+    has_blackmail = bool(
+        re.search(r"\b(leak|post|share|expose|send|publish)\s+(it|your\s+video|video|photo|photos|pics|webcam|pictures|secrets|mms|clip)\b", text_lower)
+        or re.search(r"\b(recorded|captured|hacked)\s+(your\s+)?(video|webcam|screen|camera|clip)\b", text_lower)
+        or re.search(r"\b(pay|send\s+money)\s+(or|if\s+you\s+do\s+not|if\s+you\s+don't)\s+.*(leak|send|post|expose|ruin|publish)\b", text_lower)
+        or re.search(r"\b(leak|send|post)\s+.*(contacts|friends|family|facebook|instagram|social\s+media)\b", text_lower)
+        or "blackmail" in text_lower or "ransom" in text_lower
+    )
+
+    has_digital_arrest = bool(
+        any(p.category == "digital_arrest" for p in matched_patterns)
+        or re.search(r"\b(digital\s+arrest|cbi|ncb|narcotics|customs|police|fir|warrant|chargesheet|crime\s+branch)\b", text_lower)
+    )
+
+    has_financial_demand = bool(
+        any(p.category == "financial_extortion" for p in matched_patterns)
+        or re.search(r"\b(transfer|send|pay|deposit)\s+(\d+|money|rs|inr|cash|fine|amount|crypto|bitcoin|usdt|card)\b", text_lower)
+        or re.search(r"\b(if\s+you\s+(do\s+not|don't)\s+pay|pay\s+or\s+else)\b", text_lower)
+    )
+
+    has_utility_scam = bool(
+        re.search(r"\b(electricity|power|sim|bill|kyc|pan|aadhaar)\s+(cutoff|disconnected|blocked|suspended|deactivated|frozen|unpaid)\b", text_lower)
+    )
+
+    # 1. Direct Death / Violence Threat
+    if has_death_threat or any(p.pattern_id == "PT001" for p in matched_patterns):
+        core_meaning = (
+            "CRITICAL VIOLENCE THREAT: The sender is issuing an explicit, targeted threat of physical harm "
+            "or death against the recipient ('" + text[:60] + ("..." if len(text) > 60 else "") + "')."
+        )
+        threat_level = "CRITICAL"
+        threat_cat_label = "Direct Physical Harm / Death Threat"
+        target_vector = "Personal Life & Physical Safety"
+        coercion_tactic = "Criminal Intimidation & Death Threat (IPC Section 506 / BNS 351)"
+        urgency = "CRITICAL"
+        sentiment = "Highly Aggressive & Violent"
+        verdict = "PERSONAL_THREAT_DETECTED"
+        threat_score = max(threat_score, 0.99)
+        action = (
+            "EMERGENCY: Do NOT reply or confront sender. Immediately preserve screenshots and text evidence. "
+            "Contact National Emergency (112) or Cybercrime Helpline (1930) and register a Police FIR."
+        )
+
+    # 2. Blackmail / Sextortion Threat
+    elif has_blackmail or any(p.pattern_id == "BM001" for p in matched_patterns):
+        core_meaning = (
+            "EXTORTION & BLACKMAIL: The sender is threatening to publicly leak or distribute compromising media "
+            "/ personal information unless monetary demands are met."
+        )
+        threat_level = "CRITICAL"
+        threat_cat_label = "Blackmail & Sextortion"
+        target_vector = "Personal Privacy & Reputation"
+        coercion_tactic = "Defamation & Ransom Extortion (IT Act Section 67 / IPC 384)"
+        urgency = "HIGH"
+        sentiment = "Coercive & Intimidating"
+        verdict = "SCAM_DETECTED"
+        threat_score = max(threat_score, 0.95)
+        action = (
+            "CRITICAL: Do NOT transfer any money or gift cards. Block sender, preserve evidence, "
+            "and file a cybercrime complaint at cybercrime.gov.in / call 1930."
+        )
+
+    # 3. Digital Arrest / Law Enforcement Impersonation
+    elif has_digital_arrest and (threat_score > 0.40 or has_financial_demand):
+        core_meaning = (
+            "DIGITAL ARREST SCAM: The sender is impersonating law enforcement (CBI/Police/Customs) and fabricating "
+            "fake legal warrants or drug seizures to intimidate the victim into transferring funds to a 'safe account'."
+        )
+        threat_level = "HIGH"
+        threat_cat_label = "Digital Arrest Impersonation"
+        target_vector = "Legal Liberty & Financial Assets"
+        coercion_tactic = "Fake Authority Coercion & Fraudulent Warrants"
+        urgency = "HIGH"
+        sentiment = "Authoritative & Threatening"
+        verdict = "DIGITAL_ARREST_DETECTED"
+        threat_score = max(threat_score, 0.92)
+        action = (
+            "ALERT: Indian law enforcement NEVER conducts arrests via video call or demands money transfers. "
+            "Hang up immediately, do NOT pay, and dial 1930."
+        )
+
+    # 4. Utility / Banking Suspension Scam
+    elif has_utility_scam:
+        core_meaning = (
+            "UTILITY / KYC DISCONNECTION SCAM: The sender is fabricating an imminent service suspension "
+            "(Electricity/SIM/Bank) to induce panic and force an unauthorized payment or link click."
+        )
+        threat_level = "HIGH"
+        threat_cat_label = "Utility / Banking Panic Scam"
+        target_vector = "Financial Credentials & Personal Identity"
+        coercion_tactic = "False Urgency & Service Cutoff Panic"
+        urgency = "HIGH"
+        sentiment = "Deceptive & Urgent"
+        verdict = "SCAM_DETECTED"
+        threat_score = max(threat_score, 0.85)
+        action = (
+            "Do NOT click any links or call the number in the SMS. Verify your bill or KYC directly "
+            "via official provider apps or portals."
+        )
+
+    # 5. General Scam / Extortion
+    elif threat_score > 0.60 or matched_patterns:
+        core_meaning = (
+            "SUSPICIOUS COERCION: The message contains multiple indicators of social engineering, "
+            "unsolicited urgency, or monetary demands."
+        )
+        threat_level = "ELEVATED"
+        threat_cat_label = "Social Engineering & Extortion"
+        target_vector = "Financial Assets"
+        coercion_tactic = "Psychological Pressure & Urgency"
+        urgency = "MEDIUM"
+        sentiment = "Manipulative"
+        verdict = "SCAM_DETECTED"
+        action = "High scam probability. Do not comply with demands. Report to cybercrime 1930."
+
+    # 6. Low / Safe
+    elif threat_score > 0.25:
+        core_meaning = "The message contains mild urgency or suspicious phrasing but no verified threat indicators."
+        threat_level = "LOW"
+        threat_cat_label = "Unverified Phrasing"
+        target_vector = "General Inquiry"
+        coercion_tactic = "None Detected"
+        urgency = "LOW"
+        sentiment = "Neutral"
+        verdict = "SUSPICIOUS"
+        action = "Exercise standard caution. Verify sender through trusted channels."
+    else:
+        core_meaning = "BENIGN / SAFE: Normal communication with zero extortion, violence, or impersonation markers detected."
+        threat_level = "SAFE"
+        threat_cat_label = "Benign Communication"
+        target_vector = "None"
+        coercion_tactic = "None"
+        urgency = "LOW"
+        sentiment = "Neutral / Non-Threatening"
+        verdict = "SAFE"
+        threat_score = 0.02
+        action = "No threat indicators detected. Message appears safe."
+
+    semantic_dict = {
+        "core_meaning": core_meaning,
+        "threat_level": threat_level,
+        "threat_category_label": threat_cat_label,
+        "target_vector": target_vector,
+        "coercion_tactic": coercion_tactic,
+        "urgency_level": urgency,
+        "sentiment_polarity": sentiment,
+    }
+
+    return semantic_dict, verdict, action
 
 
 # ---------------------------------------------------------------------------
@@ -186,7 +393,7 @@ class _PurePyAhoCorasick:
 # Automaton Builder & SMSShield Engine
 # ---------------------------------------------------------------------------
 class SMSShield:
-    """Aho-Corasick automaton for O(n+m) multi-pattern matching."""
+    """Aho-Corasick automaton + Semantic Intent Parser."""
 
     def __init__(self) -> None:
         if ahocorasick is not None:
@@ -245,7 +452,7 @@ class SMSShield:
 
         pattern_list = sorted(matched.values(), key=lambda p: p.weight, reverse=True)
 
-        # Fused threat score: 1 - product of (1 - weight) for each unique pattern
+        # Fused threat score: 1 - product of (1 - weight)
         threat_score: float = 0.0
         if pattern_list:
             from functools import reduce
@@ -257,22 +464,15 @@ class SMSShield:
             )
             threat_score = round(1.0 - complement_product, 4)
 
-        # Verdict
-        has_digital_arrest = any(p.category == "digital_arrest" for p in pattern_list)
-        if has_digital_arrest and threat_score > 0.65:
-            verdict = "DIGITAL_ARREST_DETECTED"
-            action = "Immediately hang up. Contact cybercrime helpline 1930. Do NOT transfer money."
-        elif threat_score > 0.65:
-            verdict = "SCAM_DETECTED"
-            action = "High scam probability. Do not comply with demands. Report to 1930."
-        elif threat_score > 0.30:
-            verdict = "SUSPICIOUS"
-            action = "Exercise caution. Verify sender identity through official channels."
-        else:
-            verdict = "SAFE"
-            action = "No significant threat indicators detected."
+        # Run Semantic NLP Parser to extract deeper intent and sentence meaning
+        semantic_data, verdict, action = analyze_sentence_semantics(
+            request.text, pattern_list, threat_score
+        )
 
         elapsed_ms = (time.perf_counter() - t_start) * 1000
+
+        from backend.schemas.message import SemanticAnalysis
+        semantic_obj = SemanticAnalysis(**semantic_data)
 
         return MessageScanResponse(
             text_hash=text_hash,
@@ -283,6 +483,7 @@ class SMSShield:
             verdict=verdict,  # type: ignore[arg-type]
             recommended_action=action,
             scan_ms=round(elapsed_ms, 4),
+            semantic_analysis=semantic_obj,
         )
 
 

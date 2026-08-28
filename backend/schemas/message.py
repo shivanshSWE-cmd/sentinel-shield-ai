@@ -50,6 +50,18 @@ class ThreatPattern(BaseModel):
     weight: float = Field(..., ge=0.0, le=1.0)
 
 
+class SemanticAnalysis(BaseModel):
+    """Detailed NLP semantic analysis of the sentence meaning and intent."""
+
+    core_meaning: str = Field(..., description="Plain-English explanation of what is being demanded or threatened.")
+    threat_level: Literal["CRITICAL", "HIGH", "ELEVATED", "LOW", "SAFE"]
+    threat_category_label: str
+    target_vector: str = Field(..., description="Target: Personal Safety, Financial, Legal Freedom, etc.")
+    coercion_tactic: str = Field(..., description="Primary psychological or physical coercion tactic.")
+    urgency_level: Literal["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+    sentiment_polarity: str = Field(..., description="E.g., Highly Aggressive, Threatening, Deceptive, Neutral.")
+
+
 class MessageScanResponse(BaseModel):
     """Structured result returned by SMS / Message Shield."""
 
@@ -58,6 +70,7 @@ class MessageScanResponse(BaseModel):
     matched_patterns: List[ThreatPattern] = Field(default_factory=list)
     total_patterns_matched: int = Field(default=0, ge=0)
     threat_score: float = Field(..., ge=0.0, le=1.0)
-    verdict: Literal["SAFE", "SUSPICIOUS", "SCAM_DETECTED", "DIGITAL_ARREST_DETECTED"]
+    verdict: Literal["SAFE", "SUSPICIOUS", "SCAM_DETECTED", "DIGITAL_ARREST_DETECTED", "PERSONAL_THREAT_DETECTED"]
     recommended_action: str
     scan_ms: float = Field(..., ge=0.0)
+    semantic_analysis: Optional[SemanticAnalysis] = Field(default=None)
