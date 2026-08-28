@@ -18,6 +18,46 @@
 
 ---
 
+## 🔤 What Does "SentinelShield AI" Mean?
+
+The name **SentinelShield AI** is composed of two powerful words that together describe the core mission of this platform:
+
+| Word | Origin | Meaning in This Context |
+|------|--------|------------------------|
+| **Sentinel** | Latin *sentinella* — a guard or watchman | An always-on, real-time AI watchman that **monitors** every incoming voice call, URL, and SMS for threats — 24/7, sub-second |
+| **Shield** | Old English *scield* — a protective barrier | The active **layer of protection** that blocks, flags, and neutralizes threats before they reach the user |
+| **AI** | Artificial Intelligence | Powered by **Random Forest ML**, **DSP acoustic forensics**, and **Aho-Corasick pattern matching** — not simple rules, but learned intelligence |
+
+> **Sentinel** watches. **Shield** protects. **AI** thinks.
+
+### 🧩 Full Name Breakdown
+
+```
+S — Sub-second detection  (<300ms voice deepfake pipeline)
+E — Evidence generation   (Section 65B forensic PDF dossier)
+N — Neural ML engine      (Random Forest, 97.29% accuracy)
+T — Trusted Execution     (TEE zero-disk RAM page-locking)
+I — Indian language aware (13 languages in training data)
+N — n8n SOC integration   (Banking freeze, MFA, alerts)
+E — Entropy analysis      (Shannon entropy DGA detection)
+L — Levenshtein matching  (Typosquatting brand protection)
+
+S — Streaming WebSocket   (Real-time 200ms PCM chunks)
+H — HMAC attestation      (Cryptographic proof of zero-disk)
+I — Impersonation defense (Digital arrest, CBI/ED scams)
+E — Extortion detection   (82 Aho-Corasick SMS patterns)
+L — Legal compliance      (IT Act 2000, Evidence Act 1872)
+D — Defense platform      (Voice + URL + SMS triple-shield)
+```
+
+### 💡 Why "Neural Defenders"?
+
+The team name **Neural Defenders** reflects the philosophy that the next generation of cybersecurity defenders must think like neural systems — adaptive, pattern-aware, and always learning. Just as neurons fire in response to threats, our AI detects and responds to deepfakes, phishing, and extortion in real time.
+
+---
+
+---
+
 ## 📋 Table of Contents
 
 - [Overview](#-overview)
