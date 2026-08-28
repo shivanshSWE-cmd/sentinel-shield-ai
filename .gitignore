@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# Environment & Secrets (Never commit credentials)
+.env
+*.local
+*.pem
+*.key
+*.crt
+secrets/
+
+# Logs
+*.log
+logs/
+
+# Frontend builds
+node_modules/
+frontend/dist/
+frontend/node_modules/
+.next/
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Documentation & Proposals (Local Only - Never Push to GitHub)
+docs/
+*.docx
+project_synopsis.md
+*synopsis*
+*PROPOSAL*
+*DISTRIBUTION*
+
+# Allow pre-trained classifier model
+!backend/models/voice_classifier.joblib
