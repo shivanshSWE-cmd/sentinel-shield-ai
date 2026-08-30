@@ -227,9 +227,9 @@ window.SmsShield = {
         id: 'UP002',
         name: 'Secrecy & Video Call Isolation',
         keywords: [
-          'do not tell anyone', 'keep this confidential', 'don't inform family',
-          'don't call police', 'stay on the call', 'disconnect at your own risk',
-          'do not disconnect video call', 'remain in isolated room', 'stay on camera'
+          'do not tell anyone', 'keep this confidential', "don't inform family",
+          "don't call police", 'stay on the call', 'disconnect at your own risk',
+          "do not disconnect video call", 'remain in isolated room', 'stay on camera'
         ],
         cat: 'urgency_pressure',
         weight: 0.82

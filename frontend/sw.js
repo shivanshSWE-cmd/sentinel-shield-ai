@@ -2,7 +2,7 @@
  * SentinelShield AI — Production Service Worker (PWA Full Feature Suite)
  */
 
-const CACHE_NAME = 'sentinelshield-v4.0';
+const CACHE_NAME = 'sentinelshield-v5.0';
 const OFFLINE_URL = './index.html';
 
 const ASSETS_TO_CACHE = [
